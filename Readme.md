@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Андрей Неробов](https://up.htmlacademy.ru/javascript/21/user/1551255).
-* Наставник: `Неизвестно`.
+* Наставник: `Игорь Казанцев`(https://htmlacademy.ru/profile/id572311).
 
 ---
 
