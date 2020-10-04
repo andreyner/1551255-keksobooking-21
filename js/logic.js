@@ -1,5 +1,5 @@
 "use strict";
-
+/*
 let btnmark = document.querySelector(".map__pin.map__pin--main");
 btnmark.onmousedown = function (event) {
 
@@ -30,5 +30,5 @@ btnmark.onmousedown = function (event) {
 
   }
 };
-
+*/
 
