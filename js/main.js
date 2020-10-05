@@ -1,23 +1,23 @@
 "use strict";
-let PHOTO_REFERENCES =
+const PHOTO_REFERENCES =
   [
     'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
     'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
     'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
   ];
-let TIMES_SELECTOR =
+const TIMES_SELECTOR =
   [
     '12:00',
     '13:00',
     '14:00'
   ];
-let PIN_LOCATION = {
+const PIN_LOCATION = {
   Xmin: 0,
   Xmax: 1000,
   Ymin: 130,
   Ymax: 630
 };
-let APARTMENT_TYPE =
+const APARTMENT_TYPE =
   [
     'palace',
     'flat',
@@ -25,12 +25,12 @@ let APARTMENT_TYPE =
     'bungalow'
   ];
 
-let PRICE =
+const PRICE =
 {
   MIN: 1,
   MAX: 1000
 };
-let FEATURES =
+const FEATURES =
   [
     'wifi',
     'dishwasher',
@@ -39,12 +39,12 @@ let FEATURES =
     'elevator',
     'conditioner'
   ];
-let PIN_COUNT = 8;
+const PIN_COUNT = 8;
 const MAP_PIN_WIDTH = document.querySelector('.map__pin').getBoundingClientRect().width;
 const MAP_PIN_HEIGHT = document.querySelector('.map__pin').getBoundingClientRect().height;
 
-let pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
-let mapPins = document.querySelector(`.map__pins`);
+const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
+const mapPins = document.querySelector(`.map__pins`);
 
 let getJSMOK = function (posterCount) {
   let locationX0 = window.util.getRandomInRange(PIN_LOCATION.Xmin, PIN_LOCATION.Xmax);
