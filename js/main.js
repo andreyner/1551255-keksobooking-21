@@ -101,12 +101,13 @@ let convertJStoDOM = function (domObject) {
 let pinfragment = document.createDocumentFragment();
 
 
-(function () {
-  document.querySelector('.map').classList.remove('map--faded');
-  for (let index = 0; index < PIN_COUNT; index++) {
-    let poster = convertJStoDOM(getJSMOK(index + 1));
-    pinfragment.appendChild(poster);
+window.activemode = {
+  showAdvertise: function () {
+    for (let index = 0; index < PIN_COUNT; index++) {
+      let poster = convertJStoDOM(getJSMOK(index + 1));
+      pinfragment.appendChild(poster);
+    }
+    mapPins.appendChild(pinfragment);
   }
-  mapPins.appendChild(pinfragment);
-}
-)();
+};
+
