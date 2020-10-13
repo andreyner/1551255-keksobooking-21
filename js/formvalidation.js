@@ -61,7 +61,7 @@ price.addEventListener('invalid', function () {
       price.setCustomValidity('Ввдено не число!');
     } else {
       if (price.validity.rangeOverflow) {
-        price.setCustomValidity('Ввдено больше 1000000!');
+        price.setCustomValidity('Введено больше 1000000!');
       } else {
         price.setCustomValidity('');
       }
@@ -73,31 +73,17 @@ type.addEventListener('change', function () {
   setPrice();
 });
 let setPrice = function () {
-  if (price.value === "") {
+  if (price.value === ``) {
     price.value = price.placeholder;
   }
-  if (type.value === "bungalow") {
-    price.min = 0;
-    price.placeholder = price.min;
-  } else {
-    if (type.value === "flat") {
-      price.min = 1000;
-      price.placeholder = price.min;
-    } else {
-      if (type.value === "house") {
-        price.min = 5000;
-        price.placeholder = price.min;
-      } else {
-        if (type.value === "palace") {
-          price.min = 10000;
-          price.placeholder = price.min;
-        }
-
-      }
-
-    }
+  switch (type.value) {
+    case "bungalow": price.min = 0; price.placeholder = price.min; break;
+    case "flat": price.min = 1000; price.placeholder = price.min; break;
+    case "house": price.min = 5000; price.placeholder = price.min; break;
+    case "palace": price.min = 10000; price.placeholder = price.min; break;
   }
 };
+
 (function () {
   timein.selectedIndex = timeout.selectedIndex;
   setPrice();

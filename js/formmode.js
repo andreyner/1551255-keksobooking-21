@@ -9,8 +9,8 @@ const pinHeight = 65 + 22;
 let formIsActive = false;
 btnPin.onmousedown = function (event) {
 
-  let shiftX = event.clientX - btnPin.getBoundingClientRect().left + 50.5;
-  let shiftY = event.clientY - btnPin.getBoundingClientRect().top;
+  const shiftX = event.clientX - btnPin.getBoundingClientRect().left + 50.5;
+  const shiftY = event.clientY - btnPin.getBoundingClientRect().top;
   function moveAt(pageX, pageY) {
     btnPin.style.left = pageX - shiftX + `px`;
     btnPin.style.top = pageY - shiftY + `px`;
@@ -32,10 +32,6 @@ btnPin.onmousedown = function (event) {
       document.removeEventListener(`mousemove`, onMouseMove);
       btnPin.onmouseup = null;
     };
-
-    document.querySelector(`.map`).classList.remove(`map--faded`);
-    document.querySelector(`.ad-form`).classList.remove(`ad-form--disabled`);
-
   }
 };
 btnPin.addEventListener('keydown', function (evt) {
@@ -50,6 +46,8 @@ let activateForm = function () {
     setFormMode(false);
     setAddress();
     address.readOnly = true;
+    document.querySelector(`.map`).classList.remove(`map--faded`);
+    document.querySelector(`.ad-form`).classList.remove(`ad-form--disabled`);
   }
 };
 
