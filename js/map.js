@@ -6,10 +6,11 @@ const mapFeature = document.querySelector('.map__features');
 const address = document.getElementById('address');
 const pinWidth = 65;
 const pinHeight = 65 + 22;
+const pinDecrease = 50.5;
 let formIsActive = false;
 btnPin.onmousedown = function (event) {
 
-  const shiftX = event.clientX - btnPin.getBoundingClientRect().left + 50.5;
+  const shiftX = event.clientX - btnPin.getBoundingClientRect().left + pinDecrease;
   const shiftY = event.clientY - btnPin.getBoundingClientRect().top;
   function moveAt(pageX, pageY) {
     btnPin.style.left = pageX - shiftX + `px`;
@@ -23,14 +24,8 @@ btnPin.onmousedown = function (event) {
     activateForm();
     moveAt(event.pageX, event.pageY);
     document.addEventListener(`mousemove`, onMouseMove);
-
-    btnPin.onmouseout = function () {
+    document.onmouseup = function () {
       document.removeEventListener(`mousemove`, onMouseMove);
-      btnPin.mouseout = null;
-    };
-    btnPin.onmouseup = function () {
-      document.removeEventListener(`mousemove`, onMouseMove);
-      btnPin.onmouseup = null;
     };
   }
 };
@@ -42,7 +37,7 @@ btnPin.addEventListener('keydown', function (evt) {
 let activateForm = function () {
   if (!formIsActive) {
     formIsActive = true;
-    window.activemode.showAdvertise();
+    window.pin.showPins();
     setFormMode(false);
     setAddress();
     address.readOnly = true;
@@ -67,9 +62,9 @@ let setAddress = function () {
 
 };
 
-let disableForm = function () {
-  setFormMode(true);
-  setAddress();
+window.map = {
+  disableForm: function () {
+    setFormMode(true);
+    setAddress();
+  }
 };
-
-disableForm();
