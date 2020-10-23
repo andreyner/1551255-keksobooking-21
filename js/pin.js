@@ -1,7 +1,6 @@
 "use strict";
 const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
 const mapPins = document.querySelector(`.map__pins`);
-const PIN_COUNT = 8;
 
 let convertJStoDOM = function (domObject) {
   let newPin = pinTemplate.cloneNode(true);
@@ -20,11 +19,15 @@ let pinfragment = document.createDocumentFragment();
 
 
 let drowPins = function () {
-  for (let index = 0; index < PIN_COUNT; index++) {
-    let poster = convertJStoDOM(window.data.source(index + 1));
-    pinfragment.appendChild(poster);
-  }
-  mapPins.appendChild(pinfragment);
+
+  window.backend.load(function (cards) {
+    for (let index = 0; index < cards.length; index++) {
+      let poster = convertJStoDOM(cards[index]);
+      pinfragment.appendChild(poster);
+    }
+    mapPins.appendChild(pinfragment);
+  }, window.util.errorHandler);
+
 };
 
 window.pin = {
