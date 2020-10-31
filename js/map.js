@@ -8,6 +8,16 @@ const pinWidth = 65;
 const pinHeight = 65 + 22;
 const pinDecrease = 50.5;
 let formIsActive = false;
+let mapPinsDOM = [];
+const housingType = document.getElementById('housing-type');
+const housingPrice = document.getElementById('housing-price');
+const housingRooms = document.getElementById('housing-rooms');
+const housingGuests = document.getElementById('housing-guests');
+const housingFeatures = document.getElementById('housing-features');
+
+
+let housingTypeFilter = "any";
+const MAX_PINS_FILTER = 5;
 btnPin.onmousedown = function (event) {
 
   const shiftX = event.clientX - btnPin.getBoundingClientRect().left + pinDecrease;
@@ -37,7 +47,7 @@ btnPin.addEventListener('keydown', function (evt) {
 let activateForm = function () {
   if (!formIsActive) {
     formIsActive = true;
-    window.pin.showPins();
+    updatePins();
     setFormMode(false);
     setAddress();
     address.readOnly = true;
@@ -62,9 +72,60 @@ let setAddress = function () {
 
 };
 
+
+const successHandler = function (data) {
+  mapPinsDOM = data;
+};
+window.backend.load(successHandler, window.util.errorHandler);
+
 window.map = {
   disableForm: function () {
     setFormMode(true);
     setAddress();
   }
 };
+
+const updatePins = function () {
+  window.pinrender.clear();
+  let filteredData = mapPinsDOM.slice().filter(function (x) {
+    if (housingTypeFilter !== "any") {
+      if (x.offer !== undefined && x.offer.type === housingTypeFilter) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return true;
+    }
+  });
+  let count = 0;
+  filteredData = filteredData.filter(function () {
+    count++;
+    if (count <= MAX_PINS_FILTER) {
+      return true;
+    }
+    return false;
+  });
+  window.pinrender.drowPins(filteredData);
+};
+
+
+housingType.addEventListener('change', function () {
+  housingTypeFilter = housingType.value;
+  updatePins();
+});
+
+housingPrice.addEventListener('change', function () {
+  updatePins();
+});
+
+housingRooms.addEventListener('change', function () {
+  updatePins();
+});
+housingGuests.addEventListener('change', function () {
+  updatePins();
+});
+
+housingFeatures.addEventListener('change', function () {
+  updatePins();
+});
