@@ -86,7 +86,7 @@ window.map = {
 };
 
 const updatePins = function () {
-  window.pinrender.clear();
+  window.pinRender.clear();
   let filteredData = mapPinsDOM.slice().filter(function (x) {
     if (housingTypeFilter !== "any") {
       if (x.offer !== undefined && x.offer.type === housingTypeFilter) {
@@ -106,7 +106,7 @@ const updatePins = function () {
     }
     return false;
   });
-  window.pinrender.drowPins(filteredData);
+  window.pinRender.drowPins(filteredData);
 };
 
 

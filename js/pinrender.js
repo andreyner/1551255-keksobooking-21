@@ -75,7 +75,7 @@ let pinOnClick = function (pin, data) {
   MAP.appendChild(CARD_DETAIL);
 };
 
-window.pinrender = {
+window.pinRender = {
   drowPins: function (cards) {
     for (let index = 0; index < cards.length; index++) {
       let poster = convertJStoDOM(cards[index]);
