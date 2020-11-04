@@ -10,6 +10,14 @@ const APPARTMENT_PHOTO =
   Height: 40,
   Width: 45
 };
+const TYPE_APPRTMENT_MAP =
+{
+  "bungalow": "Бунгало",
+  "flat": "Квартира",
+  "house": "Дом",
+  "palace": "Дворец"
+
+};
 
 let convertJStoDOM = function (domObject) {
   let newPin = PIN_TEMPLATE.cloneNode(true);
@@ -33,10 +41,23 @@ let pinOnClick = function (pin, data) {
     CARD_DETAIL.querySelector('.popup__avatar').src = data.author.avatar;
     CARD_DETAIL.querySelector('.popup__title').textContent = data.offer.title;
     CARD_DETAIL.querySelector('.popup__text--address').textContent = data.offer.address;
-    CARD_DETAIL.querySelector('.popup__text--price').textContent = `${data.offer.price}/ночь`;
-    CARD_DETAIL.querySelector('.popup__type').textContent = data.offer.type;
-    CARD_DETAIL.querySelector('.popup__text--capacity').textContent = `${data.offer.rooms} комнаты для ${data.offer.guests} гостей`;
-    CARD_DETAIL.querySelector('.popup__text--time').textContent = `Заезд ${data.offer.checkin}, выезд ${data.offer.checkout}`;
+    CARD_DETAIL.querySelector('.popup__text--price').textContent = `${data.offer.price}₽/ночь`;
+
+    CARD_DETAIL.querySelector('.popup__type').textContent = (data.offer.type !== undefined && TYPE_APPRTMENT_MAP[data.offer.type] !== undefined) ? TYPE_APPRTMENT_MAP[data.offer.type] : "";
+    let capacity = CARD_DETAIL.querySelector('.popup__text--capacity');
+    if (data.offer.rooms === 0 && data.offer.guests === 0) {
+      capacity.style.visibility = "hidden";
+    } else {
+      capacity.style.visibility = "visible";
+    }
+    capacity.textContent = `${data.offer.rooms} комнаты для ${data.offer.guests} гостей`;
+    let time = CARD_DETAIL.querySelector('.popup__text--time');
+    if (data.offer.checkin === "0:00" && data.offer.checkout === "0:00") {
+      time.style.visibility = "hidden";
+    } else {
+      time.style.visibility = "visible";
+    }
+    time.textContent = `Заезд после ${data.offer.checkin}, выезд до ${data.offer.checkout}`;
     let features = CARD_DETAIL.querySelector('.popup__features');
     for (let index = features.children.length - 1; index > 0; index--) {
       let sepstr = features.children[index].className.split('-', 3);
