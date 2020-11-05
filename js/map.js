@@ -14,7 +14,16 @@ const housingPrice = document.getElementById('housing-price');
 const housingRooms = document.getElementById('housing-rooms');
 const housingGuests = document.getElementById('housing-guests');
 const housingFeatures = document.getElementById('housing-features');
-
+const PIN_LOCATION = {
+  Xmin: 0,
+  Xmax: document.body.offsetWidth,
+  Ymin: 130,
+  Ymax: 630
+};
+const secondaryPinSize = {
+  Width: 40,
+  Height: 40
+};
 
 let housingTypeFilter = "any";
 const MAX_PINS_FILTER = 5;
@@ -23,8 +32,12 @@ btnPin.onmousedown = function (event) {
   const shiftX = event.clientX - btnPin.getBoundingClientRect().left + pinDecrease;
   const shiftY = event.clientY - btnPin.getBoundingClientRect().top;
   function moveAt(pageX, pageY) {
-    btnPin.style.left = pageX - shiftX + `px`;
-    btnPin.style.top = pageY - shiftY + `px`;
+    if (pageX - shiftX + pinWidth / 2 <= PIN_LOCATION.Xmax && pageX - shiftX + pinWidth / 2 >= PIN_LOCATION.Xmin) {
+      btnPin.style.left = pageX - shiftX + `px`;
+    }
+    if (pageY - shiftY + pinHeight <= PIN_LOCATION.Ymax && pageY - shiftY + pinHeight >= PIN_LOCATION.Ymin) {
+      btnPin.style.top = pageY - shiftY + `px`;
+    }
     setAddress();
   }
   function onMouseMove(e) {
@@ -106,6 +119,20 @@ const updatePins = function () {
     }
     return false;
   });
+  for (let index = 0; index < filteredData.length; index++) {
+    if (filteredData[index].location.x + secondaryPinSize.Width / 2 > PIN_LOCATION.Xmax) {
+      filteredData[index].location.x = PIN_LOCATION.Xmax - secondaryPinSize.Width / 2;
+    }
+    if (filteredData[index].location.x + secondaryPinSize.Width / 2 < PIN_LOCATION.Xmin) {
+      filteredData[index].location.x = PIN_LOCATION.Xmin - secondaryPinSize.Width / 2;
+    }
+    if (filteredData[index].location.y + secondaryPinSize.Height < PIN_LOCATION.Ymin) {
+      filteredData[index].location.y = PIN_LOCATION.Ymin - secondaryPinSize.Height;
+    }
+    if (filteredData[index].location.y + secondaryPinSize.Height > PIN_LOCATION.Ymax) {
+      filteredData[index].location.y = PIN_LOCATION.Ymax - secondaryPinSize.Height;
+    }
+  }
   window.pinRender.drowPins(filteredData);
 };
 
