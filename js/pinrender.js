@@ -34,9 +34,26 @@ let convertJStoDOM = function (domObject) {
 
 let pinfragment = document.createDocumentFragment();
 
+(function () {
+  let closeCardDetailKewDown = function (evt1) {
+    if (evt1.key === 'Escape') {
+      closeCardDetail(evt1);
+    }
+  };
+  document.addEventListener('keydown', closeCardDetailKewDown);
+  let closeCardDetailClick = function (evt1) {
+    closeCardDetail(evt1);
+  };
+  CARD_DETAIL_CLOSE.addEventListener("click", closeCardDetailClick);
 
+})();
+let closeCardDetail = function (evt1) {
+  evt1.preventDefault();
+  CARD_DETAIL.style.display = 'none';
+};
 let pinOnClick = function (pin, data) {
-  pin.addEventListener('click', function () {
+  pin.addEventListener('click', function (evt) {
+    evt.preventDefault();
     CARD_DETAIL.style.display = '';
     CARD_DETAIL.querySelector('.popup__avatar').src = data.author.avatar;
     CARD_DETAIL.querySelector('.popup__title').textContent = data.offer.title;
@@ -83,17 +100,8 @@ let pinOnClick = function (pin, data) {
       photosfragment.appendChild(image);
     }
     photos.appendChild(photosfragment);
-
-    CARD_DETAIL_CLOSE.addEventListener("click", function () {
-      closeCardDetail();
-    });
+    MAP.appendChild(CARD_DETAIL);
   });
-  let closeCardDetail = function () {
-    CARD_DETAIL.style.display = 'none';
-    CARD_DETAIL_CLOSE.removeEventListener("click", closeCardDetail);
-  };
-
-  MAP.appendChild(CARD_DETAIL);
 };
 
 window.pinRender = {
