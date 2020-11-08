@@ -11,11 +11,7 @@
   const pinDecrease = 50.5;
   let formIsActive = false;
   let mapPinsDOM = [];
-  const housingType = document.getElementById('housing-type');
-  const housingPrice = document.getElementById('housing-price');
-  const housingRooms = document.getElementById('housing-rooms');
-  const housingGuests = document.getElementById('housing-guests');
-  const housingFeatures = document.getElementById('housing-features');
+
   const fieldsets = document.querySelectorAll(`fieldset`);
   const PIN_LOCATION = {
     Xmin: 0,
@@ -33,8 +29,6 @@
     Height: 40
   };
 
-  let housingTypeFilter = "any";
-  const MAX_PINS_FILTER = 5;
   btnPin.onmousedown = function (event) {
     const shiftX = event.clientX - btnPin.getBoundingClientRect().left + pinDecrease;
     const shiftY = event.clientY - btnPin.getBoundingClientRect().top;
@@ -69,7 +63,7 @@
   let activateForm = function () {
     if (!formIsActive) {
       formIsActive = true;
-      updatePins();
+      window.filters.getFilteredData(mapPinsDOM, updatePins);
       setFormMode(false);
       setAddress();
       address.readOnly = true;
@@ -119,7 +113,7 @@
         mapFeatures[index].checked = false;
       }
     }
-    housingTypeFilter = "any";
+    // housingTypeFilter = "any";
   }
   let resetFilters = function () {
     for (let index = 0; index < mapFilters.length; index++) {
@@ -132,27 +126,8 @@
     disableForm: disable
   };
 
-  const updatePins = function () {
+  const updatePins = function (filteredData) {
     window.pinRender.clear();
-    let filteredData = mapPinsDOM.slice().filter(function (x) {
-      if (housingTypeFilter !== "any") {
-        if (x.offer !== undefined && x.offer.type === housingTypeFilter) {
-          return true;
-        } else {
-          return false;
-        }
-      } else {
-        return true;
-      }
-    });
-    let count = 0;
-    filteredData = filteredData.filter(function () {
-      count++;
-      if (count <= MAX_PINS_FILTER) {
-        return true;
-      }
-      return false;
-    });
     for (let index = 0; index < filteredData.length; index++) {
       if (filteredData[index].location.x + SECONDARY_PIN_SIZE.Width / 2 > PIN_LOCATION.Xmax) {
         filteredData[index].location.x = PIN_LOCATION.Xmax - SECONDARY_PIN_SIZE.Width / 2;
@@ -170,28 +145,9 @@
     window.pinRender.drowPins(filteredData);
   };
 
-
-  housingType.addEventListener('change', function () {
-    housingTypeFilter = housingType.value;
-    updatePins();
-  });
-
-  housingPrice.addEventListener('change', function () {
-    updatePins();
-  });
-
-  housingRooms.addEventListener('change', function () {
-    updatePins();
-  });
-  housingGuests.addEventListener('change', function () {
-    updatePins();
-  });
-
-  housingFeatures.addEventListener('change', function () {
-    updatePins();
-  });
   formReset.addEventListener('click', function (evt) {
     disable();
     evt.preventDefault();
   });
+
 })();
