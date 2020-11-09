@@ -6,9 +6,9 @@
   const mapFeatures = document.querySelector('.map__features').querySelectorAll('input');
   const formReset = document.querySelector('.ad-form__reset');
   const address = document.getElementById('address');
-  const pinWidth = 65;
-  const pinHeight = 65 + 22;
-  const pinDecrease = 50.5;
+  const PIN_WIDTH = 65;
+  const PIN_HEIGHT = 65 + 22;
+  const PIN_DECREASE = 50.5;
   let formIsActive = false;
   let mapPinsDOM = [];
 
@@ -28,13 +28,22 @@
     Width: 40,
     Height: 40
   };
+  const SECONDARY_PIN_LOCATION = {
+    Xmin: PIN_LOCATION.Xmin - SECONDARY_PIN_SIZE.Width / 2,
+    Xmax: PIN_LOCATION.Xmax - SECONDARY_PIN_SIZE.Width / 2,
+    Ymin: PIN_LOCATION.Ymin - SECONDARY_PIN_SIZE.Height,
+    Ymax: PIN_LOCATION.Ymax - SECONDARY_PIN_SIZE.Height
+  };
 
   btnPin.onmousedown = function (event) {
-    const shiftX = event.clientX - btnPin.getBoundingClientRect().left + pinDecrease;
+    const shiftX = event.clientX - btnPin.getBoundingClientRect().left + PIN_DECREASE;
     const shiftY = event.clientY - btnPin.getBoundingClientRect().top;
+    btnPin.style.position = 'absolute';
+    btnPin.style.zIndex = 1000;
     function moveAt(pageX, pageY) {
-      let pinX = pageX - shiftX + pinWidth / 2;
-      let pinY = pageY - shiftY + pinHeight;
+
+      let pinX = pageX - shiftX + PIN_WIDTH / 2;
+      let pinY = pageY - shiftY + PIN_HEIGHT;
       if (pinX <= PIN_LOCATION.Xmax && pinX >= PIN_LOCATION.Xmin) {
         btnPin.style.left = pageX - shiftX + `px`;
       }
@@ -48,7 +57,6 @@
     }
     if (event.which === 1) {
       activateForm();
-      moveAt(event.pageX, event.pageY);
       document.addEventListener(`mousemove`, onMouseMove);
       document.onmouseup = function () {
         document.removeEventListener(`mousemove`, onMouseMove);
@@ -87,7 +95,7 @@
   };
 
   let setAddress = function () {
-    address.value = `${Math.round(parseInt(btnPin.style.left, 10) + pinWidth / 2)}, ${Math.round(parseInt(btnPin.style.top, 10) + pinHeight)}`;
+    address.value = `${Math.round(parseInt(btnPin.style.left, 10) + PIN_WIDTH / 2)}, ${Math.round(parseInt(btnPin.style.top, 10) + PIN_HEIGHT)}`;
 
   };
   const successHandler = function (data) {
@@ -113,7 +121,7 @@
         mapFeatures[index].checked = false;
       }
     }
-    // housingTypeFilter = "any";
+    window.card.clearCard();
   }
   let resetFilters = function () {
     for (let index = 0; index < mapFilters.length; index++) {
@@ -128,18 +136,19 @@
 
   const updatePins = function (filteredData) {
     window.pinRender.clear();
+
     for (let index = 0; index < filteredData.length; index++) {
       if (filteredData[index].location.x + SECONDARY_PIN_SIZE.Width / 2 > PIN_LOCATION.Xmax) {
-        filteredData[index].location.x = PIN_LOCATION.Xmax - SECONDARY_PIN_SIZE.Width / 2;
+        filteredData[index].location.x = SECONDARY_PIN_LOCATION.Xmax;
       }
       if (filteredData[index].location.x + SECONDARY_PIN_SIZE.Width / 2 < PIN_LOCATION.Xmin) {
-        filteredData[index].location.x = PIN_LOCATION.Xmin - SECONDARY_PIN_SIZE.Width / 2;
+        filteredData[index].location.x = SECONDARY_PIN_LOCATION.Xmin;
       }
       if (filteredData[index].location.y + SECONDARY_PIN_SIZE.Height < PIN_LOCATION.Ymin) {
-        filteredData[index].location.y = PIN_LOCATION.Ymin - SECONDARY_PIN_SIZE.Height;
+        filteredData[index].location.y = SECONDARY_PIN_LOCATION.Ymin;
       }
       if (filteredData[index].location.y + SECONDARY_PIN_SIZE.Height > PIN_LOCATION.Ymax) {
-        filteredData[index].location.y = PIN_LOCATION.Ymax - SECONDARY_PIN_SIZE.Height;
+        filteredData[index].location.y = SECONDARY_PIN_LOCATION.Ymax;
       }
     }
     window.pinRender.drowPins(filteredData);

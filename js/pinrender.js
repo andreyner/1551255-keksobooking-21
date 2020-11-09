@@ -1,9 +1,9 @@
 "use strict";
 
-const PIN_TEMPLATE = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
-const MAP_PINS = document.querySelector(`.map__pins`);
+const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
+const mapPins = document.querySelector(`.map__pins`);
 let convertJStoDOM = function (domObject) {
-  let newPin = PIN_TEMPLATE.cloneNode(true);
+  let newPin = pinTemplate.cloneNode(true);
   newPin.style = `left: ${domObject.location.x}px; top: ${domObject.location.y}px;`;
 
   for (let index = 0; index < newPin.children.length; index++) {
@@ -24,11 +24,11 @@ window.pinRender = {
       window.cardDeatail.pinOnClickHandler(poster, cards[index]);
       pinfragment.appendChild(poster);
     }
-    MAP_PINS.appendChild(pinfragment);
+    mapPins.appendChild(pinfragment);
   },
   clear: function () {
     window.cardDeatail.clearCardDeatail();
-    let addedpins = MAP_PINS.querySelectorAll('.map__pin');
+    let addedpins = mapPins.querySelectorAll('.map__pin');
     for (let index = addedpins.length - 1; index > 0; index--) {
       if (addedpins[index].className !== "map__pin map__pin--main") {
         addedpins[index].remove();

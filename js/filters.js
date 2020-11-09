@@ -35,19 +35,12 @@
     let count = 0;
     let filteredData = initialData.filter(function () {
       count++;
-      if (count <= MAX_PINS_FILTER) {
-        return true;
-      }
-      return false;
+      return count <= MAX_PINS_FILTER;
     });
 
     filteredData = filteredData.slice().filter(function (x) {
       if (housingType.value !== "any") {
-        if (x.offer !== undefined && x.offer.type === housingType.value) {
-          return true;
-        } else {
-          return false;
-        }
+        return x.offer !== undefined && x.offer.type === housingType.value;
       } else {
         return true;
       }

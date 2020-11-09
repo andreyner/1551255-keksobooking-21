@@ -1,7 +1,7 @@
 "use strict";
-const CARD_DETAIL = document.querySelector(`#card`).content.querySelector(`.map__card`).cloneNode(true);
-const CARD_DETAIL_CLOSE = CARD_DETAIL.querySelector('.popup__close');
-const MAP = document.querySelector(`.map`);
+const cardDetail = document.querySelector(`#card`).content.querySelector(`.map__card`).cloneNode(true);
+const cardDetailClose = cardDetail.querySelector('.popup__close');
+const map = document.querySelector(`.map`);
 const APPARTMENT_PHOTO =
 {
   Height: 40,
@@ -25,38 +25,38 @@ const TYPE_APPRTMENT_MAP =
   let closeCardDetailClick = function (evt1) {
     closeCardDetail(evt1);
   };
-  CARD_DETAIL_CLOSE.addEventListener("click", closeCardDetailClick);
+  cardDetailClose.addEventListener("click", closeCardDetailClick);
 
 })();
 let closeCardDetail = function (evt1) {
   evt1.preventDefault();
-  CARD_DETAIL.style.display = 'none';
+  cardDetail.style.display = 'none';
 };
 let pinOnClick = function (pin, data) {
   pin.addEventListener('click', function (evt) {
     evt.preventDefault();
-    CARD_DETAIL.style.display = '';
-    CARD_DETAIL.querySelector('.popup__avatar').src = data.author.avatar;
-    CARD_DETAIL.querySelector('.popup__title').textContent = data.offer.title;
-    CARD_DETAIL.querySelector('.popup__text--address').textContent = data.offer.address;
-    CARD_DETAIL.querySelector('.popup__text--price').textContent = `${data.offer.price}₽/ночь`;
+    cardDetail.style.display = '';
+    cardDetail.querySelector('.popup__avatar').src = data.author.avatar;
+    cardDetail.querySelector('.popup__title').textContent = data.offer.title;
+    cardDetail.querySelector('.popup__text--address').textContent = data.offer.address;
+    cardDetail.querySelector('.popup__text--price').textContent = `${data.offer.price}₽/ночь`;
 
-    CARD_DETAIL.querySelector('.popup__type').textContent = (data.offer.type !== undefined && TYPE_APPRTMENT_MAP[data.offer.type] !== undefined) ? TYPE_APPRTMENT_MAP[data.offer.type] : "";
-    let capacity = CARD_DETAIL.querySelector('.popup__text--capacity');
+    cardDetail.querySelector('.popup__type').textContent = (data.offer.type !== undefined && TYPE_APPRTMENT_MAP[data.offer.type] !== undefined) ? TYPE_APPRTMENT_MAP[data.offer.type] : "";
+    let capacity = cardDetail.querySelector('.popup__text--capacity');
     if (data.offer.rooms === 0 && data.offer.guests === 0) {
       capacity.style.visibility = "hidden";
     } else {
       capacity.style.visibility = "visible";
     }
     capacity.textContent = `${data.offer.rooms} комнаты для ${data.offer.guests} гостей`;
-    let time = CARD_DETAIL.querySelector('.popup__text--time');
+    let time = cardDetail.querySelector('.popup__text--time');
     if (data.offer.checkin === "0:00" && data.offer.checkout === "0:00") {
       time.style.visibility = "hidden";
     } else {
       time.style.visibility = "visible";
     }
     time.textContent = `Заезд после ${data.offer.checkin}, выезд до ${data.offer.checkout}`;
-    let features = CARD_DETAIL.querySelector('.popup__features');
+    let features = cardDetail.querySelector('.popup__features');
     for (let index = features.children.length - 1; index > 0; index--) {
       let sepstr = features.children[index].className.split('-', 3);
       if (data.offer.features === undefined || sepstr.length !== 3 || !data.offer.features.some((x) => x === sepstr[2])) {
@@ -66,8 +66,8 @@ let pinOnClick = function (pin, data) {
       }
     }
 
-    CARD_DETAIL.querySelector('.popup__description').textContent = data.offer.description;
-    let photos = CARD_DETAIL.querySelector('.popup__photos');
+    cardDetail.querySelector('.popup__description').textContent = data.offer.description;
+    let photos = cardDetail.querySelector('.popup__photos');
     while (photos.firstChild) {
       photos.firstChild.remove();
     }
@@ -81,7 +81,7 @@ let pinOnClick = function (pin, data) {
       photosfragment.appendChild(image);
     }
     photos.appendChild(photosfragment);
-    MAP.appendChild(CARD_DETAIL);
+    map.appendChild(cardDetail);
   });
 };
 
@@ -89,7 +89,7 @@ window.cardDeatail =
 {
   pinOnClickHandler: pinOnClick,
   clearCardDeatail: function () {
-    CARD_DETAIL.style.display = 'none';
+    cardDetail.style.display = 'none';
   }
 
 };

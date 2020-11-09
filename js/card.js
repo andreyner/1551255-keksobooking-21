@@ -7,14 +7,15 @@
   const timeout = document.getElementById('timeout');
   const roomNumber = document.getElementById('room_number');
   const capacity = document.getElementById('capacity');
+  const guests = capacity.querySelectorAll('option');
   const adForm = document.querySelector('.ad-form');
   const description = document.getElementById('description');
   const avatar = document.querySelector('.ad-form-header__input');
   const flatPhoto = document.querySelector('.ad-form__input');
-  const SUCCESS_WINDOW_TEMPLATE = document.querySelector(`#success`).content.querySelector(`.success`);
-  const ERROR_WINDOW_TEMPLATE = document.querySelector(`#error`).content.querySelector(`.error`);
-  const MAIN = document.querySelector('main');
-  const Features = document.querySelector('.features');
+  const successWindowTemplate = document.querySelector(`#success`).content.querySelector(`.success`);
+  const errorWindowTemplate = document.querySelector(`#error`).content.querySelector(`.error`);
+  const main = document.querySelector('main');
+  const features = document.querySelector('.features');
   roomNumber.addEventListener('change', function () {
     checkRoomNumber();
   });
@@ -22,20 +23,41 @@
     checkRoomNumber();
   });
   let checkRoomNumber = function () {
-    switch (roomNumber.value) {
-      case '1': if (capacity.value !== '1') {
-        capacity.setCustomValidity('1 комната для 1 гостя!');
-      } break;
-      case '2': if (capacity.value !== '1' && capacity.value !== '2') {
-        capacity.setCustomValidity('2 комнаты — для 2 гостей или для 1 гостя!');
-      } break;
-      case '3': if (capacity.value !== '0') {
-        capacity.setCustomValidity('для 3 гостей или для 2 гостей или для 1 гостя!');
-      } break;
-      case '100': if (capacity.value !== '0') {
-        capacity.setCustomValidity('не для гостей!');
-      } break;
-      default: capacity.setCustomValidity('');
+    setAvalibleGuests(roomNumber.selectedIndex);
+  };
+  let setAvalibleGuests = function (roomIndex) {
+
+    for (let index = 0; index < guests.length; index++) {
+      switch (roomIndex) {
+        case 0: if (index < 4 && index !== 2) {
+          guests[index].disabled = true;
+        } else {
+          guests[index].disabled = false;
+        } break;
+        case 1: if (index < 4 && index !== 2 && index !== 1) {
+          guests[index].disabled = true;
+        } else {
+          guests[index].disabled = false;
+        } break;
+        case 2: if (index === 3) {
+          guests[index].disabled = true;
+        } else {
+          guests[index].disabled = false;
+        } break;
+        case 3: if (index !== 3) {
+          guests[index].disabled = true;
+        } else {
+          guests[index].disabled = false;
+        } break;
+      }
+    }
+    if (guests[capacity.selectedIndex].disabled) {
+      for (let index = 0; index < guests.length; index++) {
+        if (!guests[index].disabled) {
+          capacity.selectedIndex = index;
+          break;
+        }
+      }
     }
   };
 
@@ -78,9 +100,6 @@
     setPrice();
   });
   let setPrice = function () {
-    if (price.value === ``) {
-      price.value = price.placeholder;
-    }
     switch (type.value) {
       case "bungalow": price.min = 0; price.placeholder = price.min; break;
       case "flat": price.min = 1000; price.placeholder = price.min; break;
@@ -96,7 +115,7 @@
 
   let clearform = function () {
     title.value = "";
-    price.value = 5000;
+    price.value = 1000;
     price.placeholder = price.value;
     type.value = "flat";
 
@@ -105,23 +124,23 @@
 
     roomNumber.value = 1;
     capacity.value = 1;
-
+    setAvalibleGuests(roomNumber.selectedIndex);
     description.value = "";
     avatar.value = '';
     flatPhoto.value = '';
-    for (let index = 0; index < Features.children.length; index++) {
-      if (Features.children[index].checked === true) {
-        Features.children[index].checked = false;
+    for (let index = 0; index < features.children.length; index++) {
+      if (features.children[index].checked === true) {
+        features.children[index].checked = false;
       }
     }
-    Features.disabled = true;
+    features.disabled = true;
   };
 
   let successHandler = function () {
     window.map.disableForm();
     clearform();
-    let newWindow = SUCCESS_WINDOW_TEMPLATE.cloneNode(true);
-    MAIN.appendChild(newWindow);
+    let newWindow = successWindowTemplate.cloneNode(true);
+    main.appendChild(newWindow);
     let closeSuccessWindowClick = function () {
       removeAllSuccessHandlers();
     };
@@ -131,7 +150,7 @@
       }
     };
     let removeAllSuccessHandlers = function () {
-      MAIN.removeChild(newWindow);
+      main.removeChild(newWindow);
       document.removeEventListener('click', closeSuccessWindowClick);
       document.removeEventListener('keydown', closeSuccessWindowKeyDown);
     };
@@ -141,8 +160,8 @@
   let errorHandler = function () {
     window.map.disableForm();
     clearform();
-    let newWindow = ERROR_WINDOW_TEMPLATE.cloneNode(true);
-    MAIN.appendChild(newWindow);
+    let newWindow = errorWindowTemplate.cloneNode(true);
+    main.appendChild(newWindow);
     const ERROR_BUTTON = document.querySelector(`.error__button`);
     let closeErrorButtonClick = function (evt) {
       evt.preventDefault();
@@ -158,7 +177,7 @@
       }
     };
     let removeAllErrorHandlers = function () {
-      MAIN.removeChild(newWindow);
+      main.removeChild(newWindow);
       document.removeEventListener('click', closeErrorWindowClick);
       document.removeEventListener('keydown', closeErrorWindowKeyDown);
     };
@@ -166,8 +185,10 @@
     document.addEventListener('keydown', closeErrorWindowKeyDown);
 
   };
-
-
+  window.card =
+  {
+    clearCard: clearform
+  };
   (function () {
     timein.selectedIndex = timeout.selectedIndex;
     setPrice();

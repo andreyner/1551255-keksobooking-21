@@ -2,7 +2,6 @@
 (function () {
   const GET_CARDS_URL = 'https://21.javascript.pages.academy/keksobooking/data';
   const POST_CARDS_URL = 'https://21.javascript.pages.academy/keksobooking';
-  // const GET_CARDS_URL = 'https://javascript.pages.academy/keksobooking/data';
   let StatusCode = {
     OK: 200
   };
