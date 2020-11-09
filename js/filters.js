@@ -56,21 +56,9 @@
       if (housingGuests.value !== "any") {
         if (x.offer !== undefined && x.offer.guests !== undefined) {
           switch (housingGuests.selectedIndex) {
-            case 1: if (x.offer.guests >= 2) {
-              return true;
-            } else {
-              return false;
-            }
-            case 2: if (x.offer.guests >= 1) {
-              return true;
-            } else {
-              return false;
-            }
-            case 3: if (x.offer.guests === 0) {
-              return true;
-            } else {
-              return false;
-            }
+            case 1: return x.offer.guests >= 2;
+            case 2: return x.offer.guests >= 1;
+            case 3: return x.offer.guests === 0;
             default: return true;
           }
         } else {
@@ -84,21 +72,9 @@
       if (housingRooms.value !== "any") {
         if (x.offer !== undefined && x.offer.rooms !== undefined) {
           switch (housingRooms.selectedIndex) {
-            case 1: if (x.offer.rooms === 1) {
-              return true;
-            } else {
-              return false;
-            }
-            case 2: if (x.offer.rooms === 2) {
-              return true;
-            } else {
-              return false;
-            }
-            case 3: if (x.offer.rooms === 3) {
-              return true;
-            } else {
-              return false;
-            }
+            case 1: return x.offer.rooms === 1;
+            case 2: return x.offer.rooms === 2;
+            case 3: return x.offer.rooms === 3;
             default: return true;
           }
         } else {
@@ -112,21 +88,9 @@
       if (housingPrice.value !== "any") {
         if (x.offer !== undefined && x.offer.price !== undefined) {
           switch (housingPrice.selectedIndex) {
-            case 1: if (x.offer.price >= 10000 && x.offer.price < 50000) {
-              return true;
-            } else {
-              return false;
-            }
-            case 2: if (x.offer.price < 10000) {
-              return true;
-            } else {
-              return false;
-            }
-            case 3: if (x.offer.price >= 50000) {
-              return true;
-            } else {
-              return false;
-            }
+            case 1: return x.offer.price >= 10000 && x.offer.price < 50000;
+            case 2: return x.offer.price < 10000;
+            case 3: return x.offer.price >= 50000;
             default: return true;
           }
         } else {
