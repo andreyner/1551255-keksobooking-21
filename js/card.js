@@ -22,23 +22,20 @@
     checkRoomNumber();
   });
   let checkRoomNumber = function () {
-    if (roomNumber.value === '1' && capacity.value !== '1') {
-      capacity.setCustomValidity('1 комната для 1 гостя!');
-    } else {
-      if (roomNumber.value === '2' && capacity.value !== '1' && capacity.value !== '2') {
+    switch (roomNumber.value) {
+      case '1': if (capacity.value !== '1') {
+        capacity.setCustomValidity('1 комната для 1 гостя!');
+      } break;
+      case '2': if (capacity.value !== '1' && capacity.value !== '2') {
         capacity.setCustomValidity('2 комнаты — для 2 гостей или для 1 гостя!');
-      } else {
-        if (roomNumber.value === '3' && capacity.value !== '1' && capacity.value !== '2'
-          && capacity.value !== '3') {
-          capacity.setCustomValidity('для 3 гостей или для 2 гостей или для 1 гостя!');
-        } else {
-          if (roomNumber.value === '100' && capacity.value !== '0') {
-            capacity.setCustomValidity('не для гостей!');
-          } else {
-            capacity.setCustomValidity('');
-          }
-        }
-      }
+      } break;
+      case '3': if (capacity.value !== '0') {
+        capacity.setCustomValidity('для 3 гостей или для 2 гостей или для 1 гостя!');
+      } break;
+      case '100': if (capacity.value !== '0') {
+        capacity.setCustomValidity('не для гостей!');
+      } break;
+      default: capacity.setCustomValidity('');
     }
   };
 
