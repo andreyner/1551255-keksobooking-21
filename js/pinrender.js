@@ -17,6 +17,7 @@ let convertJStoDOM = function (domObject) {
 
 let pinfragment = document.createDocumentFragment();
 
+
 window.pinRender = {
   drowPins: function (cards) {
     for (let index = 0; index < cards.length; index++) {
