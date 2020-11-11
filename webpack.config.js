@@ -7,7 +7,7 @@ module.exports = {
       "./js/backend.js",
       "./js/card.js",
       "./js/cardDetail.js",
-      "./js/pinRender.js",
+      "./js/pinrender.js",
       "./js/debounce.js",
       "./js/filters.js",
       "./js/map.js",
