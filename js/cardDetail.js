@@ -90,5 +90,4 @@ window.cardDeatail =
   clearCardDeatail: function () {
     cardDetail.style.display = 'none';
   }
-
 };
