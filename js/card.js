@@ -2,7 +2,7 @@
 (function () {
   const title = document.getElementById('title');
   const price = document.getElementById('price');
-  const type = document.getElementById('type');
+  const typeOfHousing = document.getElementById('type');
   const timein = document.getElementById('timein');
   const timeout = document.getElementById('timeout');
   const roomNumber = document.getElementById('room_number');
@@ -14,8 +14,50 @@
   const flatPhoto = document.querySelector('.ad-form__input');
   const successWindowTemplate = document.querySelector(`#success`).content.querySelector(`.success`);
   const errorWindowTemplate = document.querySelector(`#error`).content.querySelector(`.error`);
+  const errorButton = document.querySelector(`.error__button`);
   const main = document.querySelector('main');
   const features = document.querySelector('.features');
+  const GUEST_TO_INDEX_MAP =
+  {
+    "oneGuest": 2,
+    "twoGuest": 1,
+    "threeGuest": 0,
+    "notForGuest": 3
+  };
+  const ROOM_TO_INDEX_MAP =
+  {
+    "oneRoom": 0,
+    "twoRoom": 1,
+    "threeRoom": 2,
+    "hundredRoom": 3
+  };
+  const TYPE_APPARTMENT_MIN_PRICE =
+  {
+    "bungalow": 0,
+    "flat": 1000,
+    "house": 5000,
+    "palace": 10000
+
+  };
+  const TYPE_APPARTMENT_NAME =
+  {
+    "bungalow": "bungalow",
+    "flat": "flat",
+    "house": "house",
+    "palace": "palace"
+  };
+  const CHECK_IN_TIME_TO_INDEX_MAP =
+  {
+    "after12": 0,
+    "after13": 1,
+    "after14": 2
+  };
+  const CHECK_OUT_TIME_TO_INDEX_MAP =
+  {
+    "before12": 0,
+    "before13": 1,
+    "before14": 2
+  };
   roomNumber.addEventListener('change', function () {
     checkRoomNumber();
   });
@@ -25,26 +67,25 @@
   let checkRoomNumber = function () {
     setAvalibleGuests(roomNumber.selectedIndex);
   };
-  let setAvalibleGuests = function (roomIndex) {
-
+  let setAvalibleGuests = function (selectedRoom) {
     for (let index = 0; index < guests.length; index++) {
-      switch (roomIndex) {
-        case 0: if (index < 4 && index !== 2) {
+      switch (selectedRoom) {
+        case ROOM_TO_INDEX_MAP.oneRoom: if (index !== GUEST_TO_INDEX_MAP.oneGuest) {
           guests[index].disabled = true;
         } else {
           guests[index].disabled = false;
         } break;
-        case 1: if (index < 4 && index !== 2 && index !== 1) {
+        case ROOM_TO_INDEX_MAP.twoRoom: if (index !== GUEST_TO_INDEX_MAP.oneGuest && index !== GUEST_TO_INDEX_MAP.twoGuest) {
           guests[index].disabled = true;
         } else {
           guests[index].disabled = false;
         } break;
-        case 2: if (index === 3) {
+        case ROOM_TO_INDEX_MAP.threeRoom: if (index === GUEST_TO_INDEX_MAP.notForGuest) {
           guests[index].disabled = true;
         } else {
           guests[index].disabled = false;
         } break;
-        case 3: if (index !== 3) {
+        case ROOM_TO_INDEX_MAP.hundredRoom: if (index !== GUEST_TO_INDEX_MAP.notForGuest) {
           guests[index].disabled = true;
         } else {
           guests[index].disabled = false;
@@ -68,7 +109,7 @@
     timein.selectedIndex = timeout.selectedIndex;
   });
 
-  title.addEventListener('invalid', function () {
+  let checkTitle = function () {
     if (title.validity.valueMissing) {
       title.setCustomValidity('Обязательное поле');
     } else {
@@ -78,9 +119,8 @@
         title.setCustomValidity('');
       }
     }
-  });
-
-  price.addEventListener('invalid', function () {
+  };
+  let checkPrice = function () {
     if (price.validity.valueMissing) {
       price.setCustomValidity('Обязательное поле');
     } else {
@@ -94,17 +134,30 @@
         }
       }
     }
+  };
+  title.addEventListener('invalid', function () {
+    checkTitle();
+  });
+  price.addEventListener('invalid', function () {
+    checkPrice();
   });
 
-  type.addEventListener('change', function () {
+  price.addEventListener('input', function () {
+    checkPrice();
+  });
+  title.addEventListener('input', function () {
+    checkTitle();
+  });
+
+  typeOfHousing.addEventListener('change', function () {
     setPrice();
   });
   let setPrice = function () {
-    switch (type.value) {
-      case "bungalow": price.min = 0; price.placeholder = price.min; break;
-      case "flat": price.min = 1000; price.placeholder = price.min; break;
-      case "house": price.min = 5000; price.placeholder = price.min; break;
-      case "palace": price.min = 10000; price.placeholder = price.min; break;
+    switch (typeOfHousing.value) {
+      case TYPE_APPARTMENT_NAME.bungalow: price.min = TYPE_APPARTMENT_MIN_PRICE.bungalow; price.placeholder = price.min; break;
+      case TYPE_APPARTMENT_NAME.flat: price.min = TYPE_APPARTMENT_MIN_PRICE.flat; price.placeholder = price.min; break;
+      case TYPE_APPARTMENT_NAME.house: price.min = TYPE_APPARTMENT_MIN_PRICE.house; price.placeholder = price.min; break;
+      case TYPE_APPARTMENT_NAME.palace: price.min = TYPE_APPARTMENT_MIN_PRICE.palace; price.placeholder = price.min; break;
     }
   };
 
@@ -115,15 +168,15 @@
 
   let clearform = function () {
     title.value = "";
-    price.value = 1000;
+    price.value = TYPE_APPARTMENT_MIN_PRICE.flat;
     price.placeholder = price.value;
-    type.value = "flat";
+    typeOfHousing.value = TYPE_APPARTMENT_NAME.flat;
 
-    timein.selectedIndex = 0;
-    timeout.selectedIndex = 0;
+    timein.selectedIndex = CHECK_IN_TIME_TO_INDEX_MAP.after12;
+    timeout.selectedIndex = CHECK_OUT_TIME_TO_INDEX_MAP.before12;
 
-    roomNumber.value = 1;
-    capacity.value = 1;
+    roomNumber.selectedIndex = ROOM_TO_INDEX_MAP.oneRoom;
+    capacity.selectedIndex = GUEST_TO_INDEX_MAP.oneGuest;
     setAvalibleGuests(roomNumber.selectedIndex);
     description.value = "";
     avatar.value = '';
@@ -141,48 +194,47 @@
     clearform();
     let newWindow = successWindowTemplate.cloneNode(true);
     main.appendChild(newWindow);
-    let closeSuccessWindowClick = function () {
+    let onDocumentClick = function () {
       removeAllSuccessHandlers();
     };
-    let closeSuccessWindowKeyDown = function (evt) {
+    let onDocumentKeyDown = function (evt) {
       if (evt.key === 'Escape') {
         removeAllSuccessHandlers();
       }
     };
     let removeAllSuccessHandlers = function () {
       main.removeChild(newWindow);
-      document.removeEventListener('click', closeSuccessWindowClick);
-      document.removeEventListener('keydown', closeSuccessWindowKeyDown);
+      document.removeEventListener('click', onDocumentClick);
+      document.removeEventListener('keydown', onDocumentKeyDown);
     };
-    document.addEventListener('click', closeSuccessWindowClick);
-    document.addEventListener('keydown', closeSuccessWindowKeyDown);
+    document.addEventListener('click', onDocumentClick);
+    document.addEventListener('keydown', onDocumentKeyDown);
   };
   let errorHandler = function () {
     window.map.disableForm();
     clearform();
     let newWindow = errorWindowTemplate.cloneNode(true);
     main.appendChild(newWindow);
-    const ERROR_BUTTON = document.querySelector(`.error__button`);
     let closeErrorButtonClick = function (evt) {
       evt.preventDefault();
       removeAllErrorHandlers();
     };
-    ERROR_BUTTON.addEventListener('click', closeErrorButtonClick);
-    let closeErrorWindowClick = function () {
+    errorButton.addEventListener('click', closeErrorButtonClick);
+    let onDocumentClick = function () {
       removeAllErrorHandlers();
     };
-    let closeErrorWindowKeyDown = function (evt) {
+    let onDocumentKeyDown = function (evt) {
       if (evt.key === 'Escape') {
         removeAllErrorHandlers();
       }
     };
     let removeAllErrorHandlers = function () {
       main.removeChild(newWindow);
-      document.removeEventListener('click', closeErrorWindowClick);
-      document.removeEventListener('keydown', closeErrorWindowKeyDown);
+      document.removeEventListener('click', onDocumentClick);
+      document.removeEventListener('keydown', onDocumentKeyDown);
     };
-    document.addEventListener('click', closeErrorWindowClick);
-    document.addEventListener('keydown', closeErrorWindowKeyDown);
+    document.addEventListener('click', onDocumentClick);
+    document.addEventListener('keydown', onDocumentKeyDown);
 
   };
   window.card =

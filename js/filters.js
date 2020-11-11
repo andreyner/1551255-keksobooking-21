@@ -8,7 +8,27 @@
   const housingFeaturesAll = housingFeatures.querySelectorAll('input');
   const MAX_PINS_FILTER = 5;
   let initialData = [];
-
+  const GUEST_TO_INDEX_MAP =
+  {
+    "any": 0,
+    "twoGuest": 1,
+    "oneGuest": 2,
+    "notForGuest": 3
+  };
+  const ROOM_TO_INDEX_MAP =
+  {
+    "any": 0,
+    "oneRoom": 1,
+    "twoRoom": 2,
+    "threeRoom": 3,
+  };
+  const APPARTMENT_PRICE_TO_INDEX_MAP =
+  {
+    "any": 0,
+    "from10000To50000": 1,
+    "to10000": 2,
+    "from50000": 3
+  };
   let updatePinsCB = function () {
 
   };
@@ -46,12 +66,12 @@
       }
     });
     filteredData = filteredData.slice().filter(function (x) {
-      if (housingGuests.value !== "any") {
+      if (housingGuests.selectedIndex !== GUEST_TO_INDEX_MAP.any) {
         if (x.offer !== undefined && x.offer.guests !== undefined) {
           switch (housingGuests.selectedIndex) {
-            case 1: return x.offer.guests >= 2;
-            case 2: return x.offer.guests >= 1;
-            case 3: return x.offer.guests === 0;
+            case GUEST_TO_INDEX_MAP.twoGuest: return x.offer.guests >= 2;
+            case GUEST_TO_INDEX_MAP.oneGuest: return x.offer.guests >= 1;
+            case GUEST_TO_INDEX_MAP.notForGuest: return x.offer.guests === 0;
             default: return true;
           }
         } else {
@@ -62,12 +82,12 @@
       }
     });
     filteredData = filteredData.slice().filter(function (x) {
-      if (housingRooms.value !== "any") {
+      if (housingRooms.selectedIndex !== ROOM_TO_INDEX_MAP.any) {
         if (x.offer !== undefined && x.offer.rooms !== undefined) {
           switch (housingRooms.selectedIndex) {
-            case 1: return x.offer.rooms === 1;
-            case 2: return x.offer.rooms === 2;
-            case 3: return x.offer.rooms === 3;
+            case ROOM_TO_INDEX_MAP.oneRoom: return x.offer.rooms === 1;
+            case ROOM_TO_INDEX_MAP.twoRoom: return x.offer.rooms === 2;
+            case ROOM_TO_INDEX_MAP.threeRoom: return x.offer.rooms === 3;
             default: return true;
           }
         } else {
@@ -78,12 +98,12 @@
       }
     });
     filteredData = filteredData.slice().filter(function (x) {
-      if (housingPrice.value !== "any") {
+      if (housingPrice.selectedIndex !== APPARTMENT_PRICE_TO_INDEX_MAP.any) {
         if (x.offer !== undefined && x.offer.price !== undefined) {
           switch (housingPrice.selectedIndex) {
-            case 1: return x.offer.price >= 10000 && x.offer.price < 50000;
-            case 2: return x.offer.price < 10000;
-            case 3: return x.offer.price >= 50000;
+            case APPARTMENT_PRICE_TO_INDEX_MAP.from10000To50000: return x.offer.price >= 10000 && x.offer.price < 50000;
+            case APPARTMENT_PRICE_TO_INDEX_MAP.to10000: return x.offer.price < 10000;
+            case APPARTMENT_PRICE_TO_INDEX_MAP.from50000: return x.offer.price >= 50000;
             default: return true;
           }
         } else {

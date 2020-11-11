@@ -16,16 +16,16 @@ const TYPE_APPRTMENT_MAP =
 
 };
 (function () {
-  let closeCardDetailKewDown = function (evt1) {
+  let onDocumentKewDown = function (evt1) {
     if (evt1.key === 'Escape') {
       closeCardDetail(evt1);
     }
   };
-  document.addEventListener('keydown', closeCardDetailKewDown);
-  let closeCardDetailClick = function (evt1) {
+  document.addEventListener('keydown', onDocumentKewDown);
+  let onCardDetailCloseClick = function (evt1) {
     closeCardDetail(evt1);
   };
-  cardDetailClose.addEventListener("click", closeCardDetailClick);
+  cardDetailClose.addEventListener("click", onCardDetailCloseClick);
 
 })();
 let closeCardDetail = function (evt1) {
@@ -58,8 +58,7 @@ let pinOnClick = function (pin, data) {
     time.textContent = `Заезд после ${data.offer.checkin}, выезд до ${data.offer.checkout}`;
     let features = cardDetail.querySelector('.popup__features');
     for (let index = features.children.length - 1; index > 0; index--) {
-      let sepstr = features.children[index].className.split('-', 3);
-      if (data.offer.features === undefined || sepstr.length !== 3 || !data.offer.features.some((x) => x === sepstr[2])) {
+      if (data.offer.features === undefined || !data.offer.features.some((x) => features.children[index].className.indexOf(x) > -1)) {
         features.children[index].style.display = 'none';
       } else {
         features.children[index].style.display = '';

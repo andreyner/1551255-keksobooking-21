@@ -8,7 +8,6 @@
   const address = document.getElementById('address');
   const PIN_WIDTH = 65;
   const PIN_HEIGHT = 65 + 22;
-  const PIN_DECREASE = 50.5;
   let formIsActive = false;
   let mapPinsDOM = [];
 
@@ -36,12 +35,11 @@
   };
 
   btnPin.onmousedown = function (event) {
-    const shiftX = event.clientX - btnPin.getBoundingClientRect().left + PIN_DECREASE;
-    const shiftY = event.clientY - btnPin.getBoundingClientRect().top;
+    const shiftX = event.clientX - parseInt(btnPin.style.left, 10);
+    const shiftY = event.clientY - parseInt(btnPin.style.top, 10) + window.pageYOffset;
     btnPin.style.position = 'absolute';
     btnPin.style.zIndex = 1000;
     function moveAt(pageX, pageY) {
-
       let pinX = pageX - shiftX + PIN_WIDTH / 2;
       let pinY = pageY - shiftY + PIN_HEIGHT;
       if (pinX <= PIN_LOCATION.Xmax && pinX >= PIN_LOCATION.Xmin) {
