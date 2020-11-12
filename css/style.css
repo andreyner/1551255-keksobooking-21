@@ -529,6 +529,25 @@ fieldset {
     margin-left: 20px;
 }
 
+.ad-form-flat__photo {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+
+  margin-right: 10px;
+  padding: 10px 10px;;
+
+  width: 70px;
+  height: 70px;
+
+  text-align: center;
+
+  border-radius: 5px;
+  background-color: #dadada;
+}
 .ad-form-header__drop-zone {
   height: 70px;
   padding: 20px 10px 5px;
@@ -784,7 +803,7 @@ fieldset {
 .ad-form__photo {
   margin-right: 10px;
   margin-bottom: 10px;
-
+  align-items: center;
   width: 70px;
   height: 70px;
 
